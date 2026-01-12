@@ -1,0 +1,80 @@
+{
+  "buckets": [
+    {
+      "name": "finance-audit",
+      "created": "2023-09-10T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "prod"},
+        {"Key": "DataClassification", "Value": "restricted"}
+      ],
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "CrossAccountConditionalAllow",
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::888877776666:role/AnalyticsCross"},
+            "Action": ["s3:ListBucket", "s3:GetObject"],
+            "Resource": [
+              "arn:aws:s3:::finance-audit",
+              "arn:aws:s3:::finance-audit/*"
+            ],
+            "Condition": {
+              "StringEquals": {"aws:PrincipalOrgID": "o-xyz789"}
+            }
+          },
+          {
+            "Sid": "LegacyACLException",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::finance-audit/legacy/*"
+          }
+        ]
+      },
+      "acl": {
+        "Grants": [
+          {
+            "Grantee": {
+              "Type": "Group",
+              "URI": "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
+            },
+            "Permission": "READ"
+          }
+        ]
+      }
+    },
+    {
+      "name": "reports-bucket",
+      "created": "2024-07-01T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "dev"}
+      ],
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AllowReadForAll",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::reports-bucket/*"
+          }
+        ]
+      },
+      "acl": null
+    }
+  ]
+}

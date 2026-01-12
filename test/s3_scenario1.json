@@ -1,0 +1,112 @@
+{
+  "buckets": [
+    {
+      "name": "prod-finance",
+      "created": "2024-01-01T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "prod"},
+        {"Key": "DataClassification", "Value": "confidential"}
+      ],
+      "public_access_block": {
+        "BlockPublicAcls": false,
+        "IgnorePublicAcls": false,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AllowAnalyticsRead",
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::111122223333:role/AnalyticsRole"},
+            "Action": ["s3:GetObject"],
+            "Resource": ["arn:aws:s3:::prod-finance/*"]
+          },
+          {
+            "Sid": "AmbiguousOrgRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": ["s3:GetObject"],
+            "Resource": ["arn:aws:s3:::prod-finance/*"],
+            "Condition": {
+              "StringEquals": {"aws:PrincipalOrgID": "o-abc123"}
+            }
+          },
+          {
+            "Sid": "ExplicitDenyList",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": ["s3:ListBucket"],
+            "Resource": ["arn:aws:s3:::prod-finance"]
+          }
+        ]
+      },
+      "acl": {
+        "Grants": [
+          {
+            "Grantee": {
+              "Type": "Group",
+              "URI": "http://acs.amazonaws.com/groups/global/AllUsers"
+            },
+            "Permission": "READ"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stage-artifacts",
+      "created": "2024-02-10T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "stage"}
+      ],
+      "public_access_block": null,
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "CIReadWithCondition",
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::111122223333:role/CI_GitHub"},
+            "Action": ["s3:ListBucket", "s3:GetObject"],
+            "Resource": [
+              "arn:aws:s3:::stage-artifacts",
+              "arn:aws:s3:::stage-artifacts/*"
+            ],
+            "Condition": {
+              "StringLike": {"aws:PrincipalArn": "arn:aws:iam::*:role/CI-*"}
+            }
+          }
+        ]
+      },
+      "acl": null
+    },
+    {
+      "name": "logs-archive",
+      "created": "2023-06-01T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "dev"}
+      ],
+      "public_access_block": null,
+      "policy": null,
+      "acl": {
+        "Grants": [
+          {
+            "Grantee": {
+              "Type": "Group",
+              "URI": "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
+            },
+            "Permission": "READ"
+          },
+          {
+            "Grantee": {
+              "Type": "CanonicalUser",
+              "ID": "79a59df900b949e55d96a1e698f0ee4a"
+            },
+            "Permission": "WRITE"
+          }
+        ]
+      }
+    }
+  ]
+}

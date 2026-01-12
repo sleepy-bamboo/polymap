@@ -1,0 +1,169 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f4f6f8;
+  color: #1f2933;
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 340px;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.sidebar-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* Panels */
+.panel {
+  margin-top: 24px;
+}
+
+.panel h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 4px;
+}
+
+/* Checkboxes */
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+/* Legend */
+.legend-group {
+  margin-bottom: 16px;
+}
+
+.legend-group h3 {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  font-size: 0.9rem;
+}
+
+.legend-sub {
+  margin: 4px 0 8px 26px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+}
+
+.legend-sub li {
+  margin-bottom: 4px;
+}
+
+
+.icon {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #333;
+}
+
+.icon.entry {
+  border-radius: 4px;
+}
+
+.icon.role {
+  border-radius: 2px;
+}
+
+.icon.bucket {
+  border-radius: 50%;
+}
+
+.edge {
+  width: 18px;
+  border-bottom-width: 2px;
+}
+
+
+.edge.assume {
+  border-bottom-style: dashed;
+}
+
+
+.sso { color: #2f6f8f; }
+.ci { color: #2e7d32; }
+.breakglass { color: #d64045; }
+
+
+.critical { color: #d64045; }
+.danger { color: #f2a900; }
+
+
+.allowed {
+  color: #d64045;
+}
+
+.ambiguous {
+  color: #f2a900;
+}
+
+.denied {
+  color: #7a7a7a;
+}
+
+
+.edge.assume {
+  border-bottom: 2px dashed #000000;
+}
+
+
+
+.list {
+  padding-left: 18px;
+  font-size: 0.9rem;
+}
+
+.notes {
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+
+.selected {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+
+
+#cy {
+  flex: 1;
+  background: #eef2f7;
+}

@@ -1,0 +1,118 @@
+{
+  "buckets": [
+    {
+      "name": "hr-private",
+      "created": "2022-11-15T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "prod"},
+        {"Key": "DataClassification", "Value": "pii"}
+      ],
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "DenyAllGet",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": ["s3:GetObject"],
+            "Resource": ["arn:aws:s3:::hr-private/*"]
+          },
+          {
+            "Sid": "AllowSecurityRead",
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::444455556666:role/AWSReservedSSO_Security_99"},
+            "Action": ["s3:ListBucket", "s3:GetObject"],
+            "Resource": [
+              "arn:aws:s3:::hr-private",
+              "arn:aws:s3:::hr-private/*"
+            ]
+          }
+        ]
+      },
+      "acl": null
+    },
+    {
+      "name": "shared-public",
+      "created": "2023-03-20T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "stage"}
+      ],
+      "public_access_block": {
+        "BlockPublicAcls": false,
+        "IgnorePublicAcls": false,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "PublicRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": ["s3:GetObject"],
+            "Resource": ["arn:aws:s3:::shared-public/*"]
+          }
+        ]
+      },
+      "acl": {
+        "Grants": [
+          {
+            "Grantee": {
+              "Type": "Group",
+              "URI": "http://acs.amazonaws.com/groups/global/AllUsers"
+            },
+            "Permission": "READ"
+          },
+          {
+            "Grantee": {
+              "Type": "CanonicalUser",
+              "ID": "c2j1a6c5f5f1b8b3f9e7a1b5d2c3e4f5"
+            },
+            "Permission": "FULL_CONTROL"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-dropbox",
+      "created": "2024-05-02T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "dev"}
+      ],
+      "public_access_block": null,
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AmbiguousCIDrop",
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::444455556666:role/CI_Deploy"},
+            "Action": ["s3:GetObject"],
+            "Resource": ["arn:aws:s3:::ci-dropbox/*"],
+            "Condition": {
+              "StringLike": {"aws:PrincipalArn": "arn:aws:iam::*:role/CI_*"}
+            }
+          }
+        ]
+      },
+      "acl": {
+        "Grants": [
+          {
+            "Grantee": {
+              "Type": "Group",
+              "URI": "http://acs.amazonaws.com/groups/global/AuthenticatedUsers"
+            },
+            "Permission": "READ"
+          }
+        ]
+      }
+    }
+  ]
+}

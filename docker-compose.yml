@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  mc-setup:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    network_mode: "service:minio"
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["sleep 2"]
+
+volumes:
+  minio_data:

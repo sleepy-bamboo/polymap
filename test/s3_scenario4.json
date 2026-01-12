@@ -1,0 +1,33 @@
+{
+  "buckets": [
+    {
+      "name": "prod-conditional",
+      "created": "2024-08-01T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "prod"}
+      ],
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AllowReadForRole",
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::777788889999:role/AWSReservedSSO_ReadOnly_conditional"},
+            "Action": ["s3:ListBucket", "s3:GetObject"],
+            "Resource": [
+              "arn:aws:s3:::prod-conditional",
+              "arn:aws:s3:::prod-conditional/*"
+            ]
+          }
+        ]
+      },
+      "acl": null
+    }
+  ]
+}

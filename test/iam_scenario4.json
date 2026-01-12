@@ -1,0 +1,43 @@
+{
+  "users": [],
+  "groups": [],
+  "roles": [
+    {
+      "role": {
+        "Arn": "arn:aws:iam::777788889999:role/AWSReservedSSO_ReadOnly_conditional",
+        "RoleName": "AWSReservedSSO_ReadOnly_conditional"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"Federated": "arn:aws:iam::777788889999:saml-provider/SSO"},
+            "Action": "sts:AssumeRoleWithSAML"
+          }
+        ]
+      },
+      "attached": [],
+      "inline": [
+        {
+          "name": "ConditionalDenyGet",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Deny",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::prod-conditional/*",
+                "Condition": {
+                  "StringEquals": {"aws:PrincipalOrgID": "o-abc123"}
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "tags": []
+    }
+  ],
+  "policies": {}
+}

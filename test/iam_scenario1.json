@@ -1,0 +1,175 @@
+{
+  "users": [],
+  "groups": [],
+  "roles": [
+    {
+      "role": {
+        "Arn": "arn:aws:iam::111122223333:role/BreakGlassAdmin",
+        "RoleName": "BreakGlassAdmin"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::111122223333:root"},
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "attached": [
+        {
+          "PolicyName": "PowerS3",
+          "PolicyArn": "arn:aws:iam::111122223333:policy/PowerS3"
+        }
+      ],
+      "inline": [
+        {
+          "name": "AssumeAnalytics",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": "arn:aws:iam::111122223333:role/AnalyticsRole"
+              }
+            ]
+          }
+        }
+      ],
+      "tags": [
+        {"Key": "BreakGlass", "Value": "true"}
+      ]
+    },
+    {
+      "role": {
+        "Arn": "arn:aws:iam::111122223333:role/AWSReservedSSO_ReadOnly_abc123",
+        "RoleName": "AWSReservedSSO_ReadOnly_abc123"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"Federated": "arn:aws:iam::111122223333:saml-provider/SSO"},
+            "Action": "sts:AssumeRoleWithSAML"
+          }
+        ]
+      },
+      "attached": [],
+      "inline": [
+        {
+          "name": "ReadOnlyFinance",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "s3:ListBucket",
+                "Resource": "arn:aws:s3:::prod-finance"
+              }
+            ]
+          }
+        }
+      ],
+      "tags": []
+    },
+    {
+      "role": {
+        "Arn": "arn:aws:iam::111122223333:role/CI_GitHub",
+        "RoleName": "CI_GitHub"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"Federated": "arn:aws:iam::111122223333:oidc-provider/token.actions.githubusercontent.com"},
+            "Action": "sts:AssumeRoleWithWebIdentity"
+          }
+        ]
+      },
+      "attached": [],
+      "inline": [
+        {
+          "name": "StageArtifactsRead",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::stage-artifacts/*"
+              }
+            ]
+          }
+        }
+      ],
+      "tags": []
+    },
+    {
+      "role": {
+        "Arn": "arn:aws:iam::111122223333:role/AnalyticsRole",
+        "RoleName": "AnalyticsRole"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::111122223333:role/BreakGlassAdmin"},
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "attached": [
+        {
+          "PolicyName": "AnalyticsRead",
+          "PolicyArn": "arn:aws:iam::111122223333:policy/AnalyticsRead"
+        }
+      ],
+      "inline": [],
+      "tags": []
+    }
+  ],
+  "policies": {
+    "arn:aws:iam::111122223333:policy/PowerS3": {
+      "policy": {
+        "PolicyName": "PowerS3",
+        "Arn": "arn:aws:iam::111122223333:policy/PowerS3",
+        "DefaultVersionId": "v1"
+      },
+      "document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+              "arn:aws:s3:::*",
+              "arn:aws:s3:::*/*"
+            ]
+          }
+        ]
+      }
+    },
+    "arn:aws:iam::111122223333:policy/AnalyticsRead": {
+      "policy": {
+        "PolicyName": "AnalyticsRead",
+        "Arn": "arn:aws:iam::111122223333:policy/AnalyticsRead",
+        "DefaultVersionId": "v1"
+      },
+      "document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::prod-finance/*"
+          }
+        ]
+      }
+    }
+  }
+}

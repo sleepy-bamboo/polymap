@@ -1,0 +1,78 @@
+{
+  "buckets": [
+    {
+      "name": "prod-finance",
+      "created": "2024-01-01T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "prod"},
+        {"Key": "DataClassification", "Value": "confidential"}
+      ],
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AmbiguousRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": ["s3:GetObject"],
+            "Resource": ["arn:aws:s3:::prod-finance/*"],
+            "Condition": {
+              "StringEquals": {"aws:PrincipalOrgID": "o-abc123"}
+            }
+          },
+          {
+            "Sid": "ExplicitDenyList",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": ["s3:ListBucket"],
+            "Resource": ["arn:aws:s3:::prod-finance"]
+          }
+        ]
+      },
+      "acl": {
+        "Grants": [
+          {
+            "Grantee": {
+              "Type": "Group",
+              "URI": "http://acs.amazonaws.com/groups/global/AllUsers"
+            },
+            "Permission": "READ"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stage-artifacts",
+      "created": "2024-02-10T00:00:00Z",
+      "tags": [
+        {"Key": "Environment", "Value": "stage"}
+      ],
+      "public_access_block": null,
+      "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AmbiguousAssumeRoleAccess",
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::111122223333:role/CI"},
+            "Action": ["s3:ListBucket", "s3:GetObject"],
+            "Resource": [
+              "arn:aws:s3:::stage-artifacts",
+              "arn:aws:s3:::stage-artifacts/*"
+            ],
+            "Condition": {
+              "StringLike": {"aws:PrincipalArn": "arn:aws:iam::*:role/CI-*"}
+            }
+          }
+        ]
+      },
+      "acl": null
+    }
+  ]
+}

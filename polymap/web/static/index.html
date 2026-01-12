@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Polymap</title>
+  <link rel="icon" href="/static/cloud-svgrepo-com.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <h1>Polymap</h1>
+        <p class="subtitle">Access graph viewer</p>
+      </header>
+
+      <section> <h2>Filters</h2> <label><input id="showCritical" type="checkbox" checked /> Critical buckets</label><br /> <label><input id="showHighRisk" type="checkbox" checked /> High-risk buckets</label><br /> <label><input id="showAllowed" type="checkbox" checked /> Allowed edges</label><br /> <label><input id="showAmbiguous" type="checkbox" checked /> Ambiguous edges</label><br /> <label><input id="showDenied" type="checkbox" checked /> Denied edges</label> </section>
+
+      <section class="panel">
+        <h2>Legend</h2>
+
+        <div class="legend-group">
+          <h3>Узлы</h3>
+
+          <div class="legend-item">
+            <span class="icon entry" style="display:inline-block;width:10px;height:10px;border-radius:4px;border:1px solid #333; background-color: #333; margin-right:6px; vertical-align:middle;"></span>
+            Базовая роль
+          </div>
+
+          <div class="legend-item">
+            <span class="icon role" style="display:inline-block;width:10px;height:10px;border-radius:2px;border:1px solid #333; background-color: #333;margin-right:6px;vertical-align:middle;"></span>
+            Роль
+          </div>
+
+          <ul class="legend-sub">
+            <li class="sso" style="color:#2f6f8f;">SSO</li>
+            <li class="ci" style="color:#2e7d32;">CI</li>
+            <li class="breakglass" style="color:#d64045;">Break-glass</li>
+          </ul>
+
+          <div class="legend-item">
+            <span class="icon bucket" style="display:inline-block;width:10px;height:10px;border-radius:50%;border:1px solid #333;margin-right:6px; background-color: #333;vertical-align:middle; "></span>
+            Бакет
+          </div>
+
+          <ul class="legend-sub">
+            <li class="critical" style="color:#d64045;">Критично</li>
+            <li class="danger" style="color:#f2a900;">Опасно</li>
+          </ul>
+        </div>
+
+        <div class="legend-group">
+          <h3>Рёбра</h3>
+
+          <div class="legend-item">
+            <span class="edge assume" style="display:inline-block;width:18px;border-bottom:2px dashed #000000;margin-right:6px;vertical-align:middle;"></span>
+            Assume-role
+          </div>
+          <div class="legend-item allowed" style="color:#d64045;">
+            <span class="edge" style="display:inline-block;width:18px;border-bottom:2px solid #d64045;margin-right:6px;vertical-align:middle;"></span>
+            Разрешено
+          </div>
+          <div class="legend-item ambiguous" style="color:#f2a900;">
+            <span class="edge" style="display:inline-block;width:18px;border-bottom:2px solid #f2a900;margin-right:6px;vertical-align:middle;"></span>
+            Неоднозначно
+          </div>
+          <div class="legend-item denied" style="color:#7a7a7a;">
+            <span class="edge" style="display:inline-block;width:18px;border-bottom:2px solid #7a7a7a;margin-right:6px;vertical-align:middle;"></span>
+            Запрещено
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Top paths</h2>
+        <ol id="topPaths" class="list"></ol>
+      </section>
+
+      <section class="panel">
+        <h2>Notes</h2>
+        <div id="notes" class="notes"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Selected</h2>
+        <pre id="selected" class="selected">Click a node or edge</pre>
+      </section>
+    </aside>
+
+    <main id="cy"></main>
+  </div>
+
+  <script src="/static/vendor/cytoscape.min.js"></script>
+  <script src="/static/graph.js"></script>
+</body>
+</html>

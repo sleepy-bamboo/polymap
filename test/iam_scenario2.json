@@ -1,0 +1,123 @@
+{
+  "users": [],
+  "groups": [],
+  "roles": [
+    {
+      "role": {
+        "Arn": "arn:aws:iam::444455556666:role/AWSReservedSSO_Security_99",
+        "RoleName": "AWSReservedSSO_Security_99"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"Federated": "arn:aws:iam::444455556666:saml-provider/SSO"},
+            "Action": "sts:AssumeRoleWithSAML"
+          }
+        ]
+      },
+      "attached": [],
+      "inline": [
+        {
+          "name": "SecurityRead",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": ["s3:ListBucket", "s3:GetObject"],
+                "Resource": [
+                  "arn:aws:s3:::hr-private",
+                  "arn:aws:s3:::hr-private/*"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "tags": []
+    },
+    {
+      "role": {
+        "Arn": "arn:aws:iam::444455556666:role/CI_Deploy",
+        "RoleName": "CI_Deploy"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"Federated": "arn:aws:iam::444455556666:oidc-provider/ci.example.com"},
+            "Action": "sts:AssumeRoleWithWebIdentity"
+          }
+        ]
+      },
+      "attached": [],
+      "inline": [
+        {
+          "name": "DeployArtifactsList",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "s3:ListBucket",
+                "Resource": "arn:aws:s3:::ci-dropbox"
+              }
+            ]
+          }
+        }
+      ],
+      "tags": []
+    },
+    {
+      "role": {
+        "Arn": "arn:aws:iam::444455556666:role/BreakGlassOps",
+        "RoleName": "BreakGlassOps"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::444455556666:root"},
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "attached": [
+        {
+          "PolicyName": "OpsS3Full",
+          "PolicyArn": "arn:aws:iam::444455556666:policy/OpsS3Full"
+        }
+      ],
+      "inline": [],
+      "tags": [
+        {"Key": "breakglass", "Value": "yes"}
+      ]
+    }
+  ],
+  "policies": {
+    "arn:aws:iam::444455556666:policy/OpsS3Full": {
+      "policy": {
+        "PolicyName": "OpsS3Full",
+        "Arn": "arn:aws:iam::444455556666:policy/OpsS3Full",
+        "DefaultVersionId": "v1"
+      },
+      "document": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+              "arn:aws:s3:::*",
+              "arn:aws:s3:::*/*"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "users": [
+    {
+      "user": {
+        "Arn": "arn:aws:iam::999900001111:user/dev_user",
+        "UserName": "dev_user"
+      },
+      "attached": [],
+      "inline": [
+        {
+          "name": "ListReportsBucket",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "s3:ListBucket",
+                "Resource": "arn:aws:s3:::reports-bucket"
+              }
+            ]
+          }
+        }
+      ],
+      "access_keys": [],
+      "groups": []
+    }
+  ],
+  "groups": [],
+  "roles": [
+    {
+      "role": {
+        "Arn": "arn:aws:iam::999900001111:role/AWSReservedSSO_ReadOnly_77",
+        "RoleName": "AWSReservedSSO_ReadOnly_77"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"Federated": "arn:aws:iam::999900001111:saml-provider/SSO"},
+            "Action": "sts:AssumeRoleWithSAML"
+          }
+        ]
+      },
+      "attached": [],
+      "inline": [
+        {
+          "name": "AssumeSecurityOps",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": "arn:aws:iam::999900001111:role/SecurityOps"
+              }
+            ]
+          }
+        }
+      ],
+      "tags": []
+    },
+    {
+      "role": {
+        "Arn": "arn:aws:iam::999900001111:role/SecurityOps",
+        "RoleName": "SecurityOps"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::999900001111:role/AWSReservedSSO_ReadOnly_77"},
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      },
+      "attached": [],
+      "inline": [
+        {
+          "name": "AssumeAnalyticsCrossAccount",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": "arn:aws:iam::888877776666:role/AnalyticsCross"
+              }
+            ]
+          }
+        }
+      ],
+      "tags": []
+    },
+    {
+      "role": {
+        "Arn": "arn:aws:iam::888877776666:role/AnalyticsCross",
+        "RoleName": "AnalyticsCross"
+      },
+      "trust": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {"AWS": "arn:aws:iam::999900001111:role/SecurityOps"},
+            "Action": "sts:AssumeRole",
+            "Condition": {
+              "StringEquals": {"aws:PrincipalOrgID": "o-xyz789"}
+            }
+          }
+        ]
+      },
+      "attached": [],
+      "inline": [
+        {
+          "name": "CrossAccountBucketRead",
+          "document": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": ["s3:ListBucket", "s3:GetObject"],
+                "Resource": [
+                  "arn:aws:s3:::finance-audit",
+                  "arn:aws:s3:::finance-audit/*"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "tags": []
+    }
+  ],
+  "policies": {}
+}
