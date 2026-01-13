@@ -64,13 +64,13 @@ polymap serve --out-dir ./out --host 127.0.0.1 --port 8082
 ## Локальные сценарии (без AWS)
 Где сценарий - набор настроек конфигурации хранилища в json
 ```bash
-python test/run_scenario.py --scenario [NumberOfScenario]
+python test/run_scenario.py --scenario <NUMBER> # номер сценария (1–4)
 ```
 
 Строгий режим для неоднозначных условий:
 
 ```bash
-python test/run_scenario.py --scenario 3 --strict-ambiguous
+python test/run_scenario.py --scenario <NUMBER> --strict-ambiguous
 ```
 
 ## Что внутри `out`:
@@ -85,3 +85,4 @@ python test/run_scenario.py --scenario 3 --strict-ambiguous
 
 - В строгом режиме `AMBIGUOUS` остаётся `AMBIGUOUS`.
 - В обычном режиме `AMBIGUOUS` трактуется как `DENIED` до полной поддержки условий.
+
