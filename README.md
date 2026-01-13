@@ -64,13 +64,13 @@ polymap serve --out-dir ./out --host 127.0.0.1 --port 8082
 ## Локальные сценарии (без AWS)
 Где сценарий - набор настроек конфигурации хранилища в json
 ```bash
-python test/run_scenario.py --scenario <NUMBER> # номер сценария (1–4)
+python test/run_scenario.py --scenario NUMBER
 ```
 
 Строгий режим для неоднозначных условий:
 
 ```bash
-python test/run_scenario.py --scenario <NUMBER> --strict-ambiguous
+python test/run_scenario.py --scenario NUMBER --strict-ambiguous
 ```
 
 ## Что внутри `out`:
